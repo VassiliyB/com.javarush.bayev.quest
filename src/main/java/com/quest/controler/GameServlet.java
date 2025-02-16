@@ -1,5 +1,6 @@
 package com.quest.controler;
 
+import com.quest.entity.Answer;
 import com.quest.entity.JsonReader;
 import com.quest.entity.Question;
 import com.quest.service.GameService;
@@ -49,5 +50,56 @@ public class GameServlet extends HttpServlet {
         req.setAttribute("answers", currentQuestion.getAnswers());
 
         req.getRequestDispatcher("/jsp/game.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+
+        gameService.processPlayerName(req, session);
+        if (session.getAttribute("playerName") != null && req.getParameter("answer") == null) {
+            resp.sendRedirect("game");
+            return;
+        }
+
+        String answerText = req.getParameter("answer");
+        if (answerText == null || answerText.isEmpty()) {
+            req.setAttribute("errorMessage", "Пожалуйста, выберите ответ");
+            doGet(req, resp);
+            return;
+        }
+
+        Question currentQuestion = gameService.getCurrentQuestion(session);
+        Answer selectedAnswer = gameService.findSelectedAnswer(currentQuestion, answerText);
+
+        if (selectedAnswer == null) {
+            resp.getWriter().println("Ответ не найден");
+            return;
+        }
+
+        if (gameService.isWin(selectedAnswer)) {
+            gameService.resetGame(session);
+            req.setAttribute("resultText", gameService.getResultText(selectedAnswer));
+            req.getRequestDispatcher("/jsp/result.jsp").forward(req, resp);
+            return;
+        }
+
+        if (gameService.isLose(selectedAnswer)) {
+            gameService.resetGame(session);
+            req.setAttribute("resultText", gameService.getResultText(selectedAnswer));
+            req.getRequestDispatcher("/jsp/result.jsp").forward(req, resp);
+            return;
+        }
+
+        Integer nextQuestionId = gameService.getNextQuestionId(selectedAnswer);
+
+        if (nextQuestionId == null) {
+            resp.getWriter().println("Нет следующего вопроса");
+            return;
+        }
+
+        session.setAttribute("currentQuestionId", nextQuestionId);
+
+        resp.sendRedirect("game");
     }
 }
