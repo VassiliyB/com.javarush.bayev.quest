@@ -51,7 +51,7 @@ public class JsonReader {
                 String text = answerNode.get("text").asText();
                 Integer nextQuestionId = answerNode.has("nextQuestionId")
                         && !answerNode.get("nextQuestionId").isNull()
-                        ? answerNode.get("nextQuestionIp").asInt()
+                        ? answerNode.get("nextQuestionId").asInt()
                         : null;
                 boolean isWin = answerNode.has("isWin")
                         && answerNode.get("isWin").asBoolean(false);
