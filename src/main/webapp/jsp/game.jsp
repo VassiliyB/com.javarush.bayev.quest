@@ -12,27 +12,34 @@
 </head>
 <body>
 <div class="container">
-    <h1 class="mt-5 text-center">Текстовый квест</h1>
-    <p class="lead">Привет, <c:out value="${sessionScope.playerName}"/>!</p>
-    <p><c:out value="${requestScope.questionText}" /></p>
-    <form action="game" method="post">
-        <c:forEach var="answer" items="${requestScope.answers}" varStatus="status">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="answer" id="answer${status.index}"
-                       value="${answer.text}" required>
-                <label class="form-check-label" for="answer${status.index}"><c:out value="${answer.text}"/></label>
+    <h1 class="mt-5 text-center">Самое главное испытание в твоей жизни</h1>
+    <div class="card-container">
+    <div class="card">
+        <div class="card-header">
+            <p class="card-header-text"><c:out value="${requestScope.questionText}" /></p>
+
+        </div>
+        <div class="container-content">
+            <form action="game" method="post">
+                <c:forEach var="answer" items="${requestScope.answers}" varStatus="status">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer" id="answer${status.index}"
+                               value="${answer.text}" required>
+                        <label class="form-check-label" for="answer${status.index}"><c:out value="${answer.text}"/></label>
+                    </div>
+                </c:forEach>
+                <br>
+                <button type="submit" class="btn btn-primary btn-castom">Ответить</button>
+            </form>
+        </div>
+        <div class="card-footer text-body-secondary">
+            <div class="stats-container">
+                <div>IP address: <c:out value="${requestScope.ipAddress}"/></div>
+                <div>Имя в игре: <c:out value="${sessionScope.playerName}"/></div>
+                <div>Количество игр: <c:out value="${sessionScope.gamesPlayed}"/></div>
             </div>
-        </c:forEach>
-        <br>
-        <button type="submit" class="btn btn-primary">Ответить</button>
-    </form>
-    <div class="stats-container">
-        <h4>Статистика:</h4>
-        <ul>
-            <li>IP address: <c:out value="${requestScope.ipAddress}"/></li>
-            <li>Имя в игре: <c:out value="${sessionScope.playerName}"/></li>
-            <li>Количество игр: <c:out value="${sessionScope.gamesPlayed}"/></li>
-        </ul>
+        </div>
+    </div>
     </div>
 </div>
 </body>

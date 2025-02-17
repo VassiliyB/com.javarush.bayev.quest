@@ -7,16 +7,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="../css/my_style.css">
+
     <title>Результат игры</title>
 </head>
 <body>
-<div class="container">
-    <h1 class="lead text-center">Результат игры</h1>
-    <p><c:out value="${requestScope.resultText}"/></p>
+<div class="container-result">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="mt-5 text-center ${requestScope.resultText.contains('Победа') ? 'win-style' : 'lose-style'}">
+                <c:out value="${requestScope.resultText}"/>
+            </h1>
+        </div>
+        <div class="card-body text-center">
+            <p class="lead">Ты это заслужил</p>
 
-    <form action="result" method="post">
-        <input type="submit" value="Начать заново">
-    </form>
+            <form action="result" method="post" class="text-center">
+                <button type="submit" class="btn btn-primary">Начать заново</button>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
